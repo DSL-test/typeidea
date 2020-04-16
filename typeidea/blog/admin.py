@@ -1,3 +1,4 @@
+from django.contrib.admin.models import LogEntry
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
@@ -5,17 +6,19 @@ from django.utils.html import format_html
 from .models import Post, Category, Tag
 from .adminforms import PostAdminForm
 from typeidea.custom_site import custom_site
+from typeidea.base_admin import BaseOwnerAdmin
 
 
 # 在同一页面编辑关联数据
+# 可选择继承自admin.StackedInline，以获取不同的展示样式
 class PostInline(admin.TabularInline):
       fields = ('title', 'desc')
-      extra = 1
+      extra = 1  # 控制额外多几个
       model = Post
 
 
 @admin.register(Category, site=custom_site)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(BaseOwnerAdmin):
       list_display = ('name', 'status', 'is_nav', 'created_time')
       fields = ('name', 'status', 'is_nav')
       inlines = [PostInline, ]
@@ -31,7 +34,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag, site=custom_site)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseOwnerAdmin):
       list_display = ('name', 'status', 'created_time')
       fields = ('name', 'status')
 
@@ -57,7 +60,7 @@ class CategoryOwnerFileter(admin.SimpleListFilter):
 
 
 @admin.register(Post, site=custom_site)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(BaseOwnerAdmin):
       # 自定义Form为textarea展示
       form = PostAdminForm
 
@@ -106,6 +109,8 @@ class PostAdmin(admin.ModelAdmin):
                   'fields': ('tag', ),
             })
       )
+      # filter_horizontal = ('tag', )
+      filter_vertical = ('tag', )
 
       def operator(self, obj):
             return format_html(
@@ -131,6 +136,10 @@ class PostAdmin(admin.ModelAdmin):
       #       js = ('https://code.jquery.com/jquery-3.4.1.slim.min.js')
 
 
+# 在admin页面上查看操作日志
+@admin.register(LogEntry, site=custom_site)
+class LogEntryAdmin(admin.ModelAdmin):
+      list_display = ['object_repr', 'object_id', 'action_flag', 'user', 'change_message']
 
 
 
