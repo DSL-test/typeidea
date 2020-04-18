@@ -8,7 +8,7 @@ from typeidea.base_admin import BaseOwnerAdmin
 @admin.register(Link, site=custom_site)
 class LinkAdmin(BaseOwnerAdmin):
       list_display = ('title', 'href', 'status', 'weight', 'created_time')
-      fields = ('title', 'href', 'staus', 'weight')
+      fields = ('title', 'href', 'status', 'weight')
 
       def save_model(self, request, obj, form, change):
             obj.owner = request.user

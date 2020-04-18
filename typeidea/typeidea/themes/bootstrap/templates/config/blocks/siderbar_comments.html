@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset="utf-8"/>
+      <title></title>
+</head>
+<body>
+      <ul>
+            {% for comment in comments %}
+                  <li>
+                        <!-- <a href="{% url 'post-detail' comment.target_id %}">{{ comment.target.title }}</a> -->
+                        <a href="{{ comment.target }}">{{ comment.target.title }}</a>
+                        {{ comment.nickname }} : {{ comment.content }}
+                  </li>
+            {% endfor %}
+      </ul>
+</body>
+</html>
