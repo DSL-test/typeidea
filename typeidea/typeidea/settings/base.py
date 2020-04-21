@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'blog.middleware.user_id.UserIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,13 +59,13 @@ ROOT_URLCONF = 'typeidea.urls'
 # 配置静态文件css
 THEME = 'bootstrap'
 
-STATIC_ROOT = '/tmp/static'
+# STATIC_ROOT = '/tmp/static'
 
-STATIC_URL = '/static/'
+# STATIC_URL = '/static/'
 
-STATICFFILES_DIRS = [
-    os.path.join(BASE_DIR, 'themes', THEME, 'static'),
-]
+# STATICFFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'themes', THEME, 'static'),
+# ]
 
 TEMPLATES = [
     {

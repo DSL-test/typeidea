@@ -10,7 +10,7 @@
 
 {% block main %}
       {% for post in post_list %}
-            <div class="card-post">
+            <div class="card post">
                   <div class="card-body">
                         <h5 class="card-title">
                               <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
