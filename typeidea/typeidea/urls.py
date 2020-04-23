@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.urls import re_path
+from django.urls import path, re_path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
 
 # from blog.views import post_list, post_detail
 from blog.views import (
@@ -30,6 +31,13 @@ from config.views import LinkListView
 from django.contrib.sitemaps import views as sitemap_views
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from .autocomplete import CategoryAutocomplete, TagAutocomplete
+from blog.apis import PostViewSet, CategoryViewSet
+
+
+router = DefaultRouter()
+router.register(r'post', PostViewSet, basename='api-post')
+router.register(r'category', CategoryViewSet, basename='api-category')
 
 
 urlpatterns = [
@@ -52,6 +60,10 @@ urlpatterns = [
     re_path(r'^comment/$', CommentView.as_view(), name='comment'),
     re_path(r'^rss|feed/$', LatestPostFeed(), name='rss'),
     re_path(r'^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
+    re_path(r'^category-autocomplete/$', CategoryAutocomplete.as_view(), name='category-autocomplete'),
+    re_path(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
+    re_path(r'^api/', include(router.urls)),
+    re_path(r'^api/docs/', include_docs_urls(title='typeidea apis')),
     path('super_admin/', admin.site.urls, name='super-admin'),
     path('admin/', custom_site.urls, name='admin'),
 ]
